@@ -1,51 +1,62 @@
 # Codebook for Programming Assignment 3: Getting and Cleaning Data Course Project
 
-The script follows the following steps:
+Feature Selection 
+=================
 
-1. Retrieve activity definitions from activity_labels.txt and name the columns as follows:
-    - ActivityNumber
-    - ActivityName
-    
-2. Retrieve feature definitions from features.txt:
-    - FeatureNumber (the row number)
-    - FeatureName (the string following the feature number)
-    
-3. Read in .txt files: 
-    - subject_test, y_test, subject_train, and y_train \n deliminated text files, no column names, as subject and y, respectively
-    - x_test and x_train, apply list of FeatureNames from features.txt as column names, as x
+As per the original codebook, the features selected for this database come from the accelerometer and gyroscope 3-axial raw signals tAcc-XYZ and tGyro-XYZ. These time domain signals (prefix 't' to denote time) were captured at a constant rate of 50 Hz. Then they were filtered using a median filter and a 3rd order low pass Butterworth filter with a corner frequency of 20 Hz to remove noise. Similarly, the acceleration signal was then separated into body and gravity acceleration signals (tBodyAcc-XYZ and tGravityAcc-XYZ) using another low pass Butterworth filter with a corner frequency of 0.3 Hz. 
 
-4. Combine data sets
-    - row_bind test and train pairs
-    - rename first column in subject to SubjectNumber and add row number as Index, as subject_mod
-    - join activity labels to y as y_mod
-    - cbind subject_mod (SubjectNumber),  y_mod (ActivityNumber and ActivityName), and x to obtain combined data set x_mod
-    
-5. Discard metrics other than mean and standard deviation
+Subsequently, the body linear acceleration and angular velocity were derived in time to obtain Jerk signals (tBodyAccJerk-XYZ and tBodyGyroJerk-XYZ). Also the magnitude of these three-dimensional signals were calculated using the Euclidean norm (tBodyAccMag, tGravityAccMag, tBodyAccJerkMag, tBodyGyroMag, tBodyGyroJerkMag). 
 
-6. Pivot in feature names (columns of x_mod other than Index, SubjectNumber and ActivityName) to FeatureName and their values to Value
+Finally a Fast Fourier Transform (FFT) was applied to some of these signals producing fBodyAcc-XYZ, fBodyAccJerk-XYZ, fBodyGyro-XYZ, fBodyAccJerkMag, fBodyGyroMag, fBodyGyroJerkMag. (Note the 'f' to indicate frequency domain signals). 
 
-7. Extract information about each variable from the FeatureName string:
-    - Feature is the initial string of letters describing the measurement type
-    - MetricType is mean or standard deviation
-    - Axis is X, Y, or Z for those measurement that specify this or NULL for those that do not.
-    
-8. Pivot out the mean and standard deviation to Mean and StandardDeviation with the relevant values from Value 
-   to arrive at the final data set
+These signals were used to estimate variables of the feature vector for each pattern:  
+'-XYZ' is used to denote 3-axial signals in the X, Y and Z directions.
 
-9. Produce second data set, averages, by grouping first data set by SubjectNumber, ActivityName, Feature, and Axis, and calculating the average of the Mean for each group, producing the required second data set of average measurements per subject, activity and feature
+tBodyAcc-XYZ
+tGravityAcc-XYZ
+tBodyAccJerk-XYZ
+tBodyGyro-XYZ
+tBodyGyroJerk-XYZ
+tBodyAccMag
+tGravityAccMag
+tBodyAccJerkMag
+tBodyGyroMag
+tBodyGyroJerkMag
+fBodyAcc-XYZ
+fBodyAccJerk-XYZ
+fBodyGyro-XYZ
+fBodyAccMag
+fBodyAccJerkMag
+fBodyGyroMag
+fBodyGyroJerkMag
+
+The set of variables that are shown in the resultant tidy data set are: 
+
+Mean: Mean value
+StandardDeviation: Standard deviation
+
+
+Additional vectors obtained by averaging the signals in a signal window sample. These are used on the angle() variable:
+
+gravityMean
+tBodyAccMean
+tBodyAccJerkMean
+tBodyGyroMean
+tBodyGyroJerkMean
+
 
 Data set 1 (x_mod):
 Index, the experiment index (one instance of Subject, Activity and group of Features)
-SubjectNumber
-ActivityName
-Feature
-Axis
-Mean
-StandardDeviation
+SubjectNumber, the identifier of the subject who was being measured
+ActivityName, the name of the activity the subject was doing at the time of the measurement
+Feature, the measurement type
+Axis, the measurement direction (if applicable)
+Mean, a measure of central tendency of the signals in the measurement
+StandardDeviation, a measure of dispersion of the signals in the measurement
 
 Data set2 (averages):
 SubjectNumber
 ActivityName
-Feature
-Axis
-Average
+Feature, the measurement type
+Axis, the measurement direction (if applicable)
+Average, the mean of the Mean variable for each feature across all measurements of it for a given SubjectNumber and ActivityName
