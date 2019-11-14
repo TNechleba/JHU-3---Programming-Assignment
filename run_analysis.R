@@ -82,10 +82,16 @@ x_mod <- subject_mod %>%
         values_from = Value) %>%
     rename(Mean = mean, StandardDeviation = std)
 
+
+
 # Compute second data set of averages by subject, activity and feature
 
 averages <- x_mod %>%
     group_by(SubjectNumber, ActivityName, Feature, Axis) %>%
     summarise(Average = mean(Mean))
+
+setwd('..')
+
+write.table(averages, "averages.txt", row.names = FALSE)
 
         
